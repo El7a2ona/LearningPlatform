@@ -1,0 +1,15 @@
+@startuml
+skinparam DefaultTextAlignment center
+skinparam StateBackgroundColor #F9F9F9
+
+[*] --> Locked : Course Enrolled / Previous Lesson Incomplete\n(FR-ACCESS-02, 03)
+
+Locked --> Available : Previous Lesson Completed\n[OR Student Starts from Any Module - FR-ACCESS-01]
+
+Available --> InProgress : Student Opens & Starts Lesson Content\n(FR-PROGRESS-03 / UC-07)
+
+InProgress --> Completed : Student Completes Required Content\n(FR-PROGRESS-01, 03 / UC-07)\n[Unlocks Next Sequential Lesson]
+
+Completed --> Available : Next Lesson Unlocked\n(FR-ACCESS-02, 03)
+Completed --> [*] : End of Module / Course Reached
+@enduml

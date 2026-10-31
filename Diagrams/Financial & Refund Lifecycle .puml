@@ -1,0 +1,23 @@
+@startuml
+skinparam DefaultTextAlignment center
+skinparam StateBackgroundColor #F9F9F9
+
+[*] --> PaymentPending : Student Initiates Purchase (UC-05)
+PaymentPending --> PaymentFailed : Verification Fails
+PaymentFailed --> [*]
+
+PaymentPending --> FundsOnHold : Payment Verified (Enrollment Granted) (FR-PAY-03)
+
+FundsOnHold --> ReleasedToBalance : Hold Period Expires Safely (24h / 7d) (FR-PAY-04, 05)
+FundsOnHold --> RefundRequested : Student Submits Refund Request (UC-06)
+
+RefundRequested --> FundsOnHold : Admin Rejects Request (Returns to Hold Status)
+RefundRequested --> ProcessingRefund : Admin Approves Refund (UC-23)
+
+ProcessingRefund --> RefundedAndAdjusted : Refund Succeeds (Balance Adjusted)
+ProcessingRefund --> RefundFailed : Financial Transaction Fails
+RefundFailed --> ProcessingRefund : Retry Reconciliation
+
+ReleasedToBalance --> [*]
+RefundedAndAdjusted --> [*]
+@enduml

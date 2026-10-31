@@ -1,0 +1,24 @@
+@startuml
+skinparam DefaultTextAlignment center
+skinparam StateBackgroundColor #F9F9F9
+
+[*] --> DisabledLocked : Student Enrolled in Course\n(FR-REVIEW-02)
+
+DisabledLocked --> PublishedVisible : Complete At Least One Module\n(FR-REVIEW-02 / UC-11)
+
+state PublishedVisible {
+  [*] --> Active
+  Active --> Edited : Student Edits Review\n(UC-11 Alt)
+  Edited --> Active
+}
+
+PublishedVisible --> UnderModeration : Teacher Reports/Disputes Review\n(FR-REVIEW-04 / UC-22 Alt)
+
+UnderModeration --> PublishedVisible : Admin Rejects Dispute (Review Valid)\n[Student is Right]
+UnderModeration --> Removed : Admin Confirms Violation\n[Teacher is Right / Policy Breach]
+
+PublishedVisible --> Removed : Admin Direct Removal\n(FR-REVIEW-04 / UC-22)
+
+Removed --> [*]
+PublishedVisible --> [*]
+@enduml

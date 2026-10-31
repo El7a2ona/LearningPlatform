@@ -1,0 +1,23 @@
+@startuml
+skinparam DefaultTextAlignment center
+skinparam StateBackgroundColor #F9F9F9
+
+[*] --> InProgress : Student Opens Quiz or Assignment\n(UC-08 / UC-09)
+
+InProgress --> Submitted : Student Submits Work / Answers\n(FR-QUIZ-03, FR-ASSIGN-03)
+
+state Submitted {
+  [*] --> EvaluationRouting
+  EvaluationRouting --> AutoGraded : Quiz Contains Only MCQs\n(FR-QUIZ-06 / UC-08 Alt)\n[Immediate Result Calculation]
+  EvaluationRouting --> PendingManualGrading : Assignment / Written Quiz Requires Review\n(FR-ASSIGN-07, FR-QUIZ-06)\n[Student Continues Learning without Blocking - FR-ACCESS-05]
+}
+
+AutoGraded --> Graded : Score Stored & Displayed\n(FR-QUIZ-04, 07)
+
+PendingManualGrading --> Graded : Teacher / TA Enters Grade & Feedback\n(FR-ASSIGN-07, 08 / UC-16)
+
+Graded --> GradeUpdated : Teacher Modifies Existing Grade\n(UC-16 Alt)\n[Subject to Editing Rules]
+
+GradeUpdated --> [*]
+Graded --> [*]
+@enduml

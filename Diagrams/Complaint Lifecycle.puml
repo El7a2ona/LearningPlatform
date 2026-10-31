@@ -1,0 +1,17 @@
+@startuml
+skinparam DefaultTextAlignment center
+skinparam StateBackgroundColor #F9F9F9
+
+[*] --> Submitted : Student Submits Complaint\n(FR-COMPLAINT-01 / UC-12)
+
+Submitted --> UnderReview : Admin Opens & Starts Investigation\n(FR-COMPLAINT-03, 05 / UC-21)
+
+UnderReview --> WaitingForTeacher : Admin Contacts Teacher for Clarification\n(FR-COMPLAINT-04 / UC-21 Alt)
+WaitingForTeacher --> UnderReview : Receive Teacher Response\n(UC-21)
+
+UnderReview --> Resolved : Admin Records Resolution / Action Taken\n(FR-COMPLAINT-06 / UC-21)
+UnderReview --> Rejected : Admin Rejects Complaint / Groundless\n(UC-21 Alt)
+
+Resolved --> [*]
+Rejected --> [*]
+@enduml

@@ -1,0 +1,36 @@
+@startuml
+skinparam DefaultTextAlignment center
+skinparam StateBackgroundColor #F9F9F9
+skinparam StateBorderColor #333333
+
+[*] --> Draft : Teacher Creates Course\n(FR-TEACH-01)
+
+state Draft {
+  [*] --> Incomplete
+  Incomplete --> ReadyForSubmission : Add Modules, Lessons,\n& Mandatory Quiz (FR-CONTENT-02)
+}
+
+Draft --> PendingApproval : Submit for Approval\n(FR-PAID-02 / UC-13)
+
+state PendingApproval {
+  [*] --> WaitingForAdminReview
+  WaitingForAdminReview --> WaitingForTeacherAck : Admin Contacts Teacher\n& Verifies First Lesson\n(FR-PAID-04, 05)
+  WaitingForTeacherAck --> ApprovedConditionMet : Teacher Accepts\nCompliance Acknowledgement\n(FR-PAID-06)
+}
+
+PendingApproval --> Rejected : Admin Rejects / Violates Policy\n(FR-PAID-02 / UC-20)
+Rejected --> Draft : Revise Course & Resubmit\n(UC-13 Alternative)
+
+PendingApproval --> Published : Admin Approves Course\n(FR-PAID-09 / UC-20)
+
+state Published {
+  [*] --> ActiveAndEnrolling
+  ActiveAndEnrolling --> Archived : Term Ends / 1-Year Milestone\n(FR-LIFECYCLE-01, 02)
+}
+
+Archived --> Deleted : Teacher/Admin Decides Permanent Deletion\n(FR-LIFECYCLE-02 / UC-26)
+Archived --> Published : Teacher Restores/Retains Course\n(UC-26 Alternative)
+
+Published --> [*] : Lifecycle Complete & Deleted
+Deleted --> [*]
+@enduml
